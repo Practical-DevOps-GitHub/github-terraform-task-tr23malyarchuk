@@ -17,24 +17,32 @@ provider "github" {
 }
 
 resource "github_repository" "repo" {
+  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
   name        = "github-terraform-task-tr23malyarchuk"
   description = "Repository configured by Terraform"
   visibility  = "public"  # Changed visibility to public
 }
 
+data "github_repository" "existing_repo" {
+  full_name = "tr23malyarchuk/github-terraform-task-tr23malyarchuk"
+}
+
 resource "github_branch" "develop" {
-  repository = github_repository.repo.name
-  branch     = "develop"
+  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
+  repository  = github_repository.repo[0].name
+  branch      = "develop"
 }
 
 resource "github_repository_collaborator" "softservedata" {
-  repository = github_repository.repo.name
-  username   = "softservedata"
-  permission = "push"
+  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
+  repository  = github_repository.repo[0].name
+  username    = "softservedata"
+  permission  = "push"
 }
 
 resource "github_branch_protection" "main" {
-  repository_id = github_repository.repo.id
+  count         = length(data.github_repository.existing_repo) == 0 ? 1 : 0
+  repository_id = github_repository.repo[0].id
   pattern       = "main"
 
   required_pull_request_reviews {
@@ -52,7 +60,8 @@ resource "github_branch_protection" "main" {
 }
 
 resource "github_branch_protection" "develop" {
-  repository_id = github_repository.repo.id
+  count         = length(data.github_repository.existing_repo) == 0 ? 1 : 0
+  repository_id = github_repository.repo[0].id
   pattern       = "develop"
 
   required_pull_request_reviews {
@@ -62,9 +71,10 @@ resource "github_branch_protection" "develop" {
 }
 
 resource "github_repository_file" "pull_request_template" {
-  repository = github_repository.repo.name
-  file       = ".github/pull_request_template.md"
-  content    = <<-EOF
+  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
+  repository  = github_repository.repo[0].name
+  file        = ".github/pull_request_template.md"
+  content     = <<-EOF
 # Pull Request Template
 
 ## Describe your changes
@@ -81,16 +91,18 @@ EOF
 }
 
 resource "github_repository_deploy_key" "deploy_key" {
-  repository = github_repository.repo.name
-  title      = "DEPLOY_KEY"
-  key        = var.deploy_key_public_key
-  read_only  = false
+  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
+  repository  = github_repository.repo[0].name
+  title       = "DEPLOY_KEY"
+  key         = var.deploy_key_public_key
+  read_only   = false
 }
 
 resource "github_actions_secret" "pat" {
-  repository       = github_repository.repo.name
-  secret_name      = "PAT"
-  plaintext_value  = var.github_pat_token
+  count           = length(data.github_repository.existing_repo) == 0 ? 1 : 0
+  repository      = github_repository.repo[0].name
+  secret_name     = "PAT"
+  plaintext_value = var.github_pat_token
 }
 
 variable "deploy_key_public_key" {
@@ -104,4 +116,3 @@ variable "discord_team_id" {
   type        = string
   default     = "1254029963192041587"
 }
-
