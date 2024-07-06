@@ -1,7 +1,8 @@
 terraform {
   required_providers {
     github = {
-      source = "integrations/github"
+      source = "hashicorp/github"
+      version = "4.19.2"
     }
   }
 }
@@ -20,7 +21,7 @@ resource "github_repository" "repo" {
   count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
   name        = "github-terraform-task-tr23malyarchuk"
   description = "Repository configured by Terraform"
-  visibility  = "public"  # Changed visibility to public
+  visibility  = "public"
 }
 
 data "github_repository" "existing_repo" {

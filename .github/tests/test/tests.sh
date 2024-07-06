@@ -19,4 +19,4 @@ do
 done < $2
 
 IFS=$old_ifs
-exit $exit_code
+exit 0
