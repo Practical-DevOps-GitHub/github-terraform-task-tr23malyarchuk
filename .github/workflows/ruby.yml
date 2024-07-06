@@ -49,6 +49,13 @@ jobs:
           terraform plan -no-color -out tfplan
           PLAN=$(terraform show -json tfplan)
           bash -e .github/tests/test/tests.sh "$PLAN" .github/tests/test/test_cases.txt
+      - name: Clear GitHub Actions cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.terraform.d/plugin-cache
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
+          restore-keys: |
+            ${{ runner.os }}-terraform-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
