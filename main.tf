@@ -61,6 +61,11 @@ resource "github_branch_protection" "develop" {
   }
 }
 
+resource "github_branch_default" "default_branch" {
+  repository = github_repository.repo.name
+  branch     = "develop"
+}
+
 resource "github_repository_file" "pull_request_template" {
   repository = github_repository.repo.name
   file       = ".github/pull_request_template.md"
@@ -96,7 +101,7 @@ resource "github_actions_secret" "pat" {
 variable "deploy_key_public_key" {
   description = "Deploy Key Public Key"
   type        = string
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDO5Tst9MOrhXKI7VPhGJszR7rxvXkTVb3ANDlWMMBL6VzZNJlpPyjWEaUarl8+xQ0CDXkZyD0OZ8BZRRsyV/e2/yn465N5UdiBJ14aJFhOrMAIP/YPg6ZmL1xOxrh8MPdW9VgjB9ez6/1QlMAZbQJJvQQgnMT8qU6RWEN6EokMdbQmDRpXodDicmHUMNMF3GDoiG8U6ArmWcn1g2uubEh7/6ZAmFhNuAhZCn+Afzi6fDQYbH18fVPVL1spHcOuoyJ0vh7QVf3zYom/+C1SEt36+Y3qsttjP5upTQWujKNEohFnuhkdV4wxAsZv2P20YXvQfFxoDDteAXnG1EICoSi4HE3CNQmKcVhFsBk7dvydu8v8nL8ZFcfvg/8UtBs/09C4MH6rVC5EmV7BlhIwOT85lgZC4snt7w2BVkFbIH7APmxbnsilnU1+VxHO+ndcT2gxh2GvfJRYkL1rAooydjHnkpvL46EXNachQDrlMKckHftOnsnv5GPrOWUUGMdsu09gfKXiAORBpUXCYDaabQXc/RSxau0wUvr4MDTQ/kGj9rOVY84sq+dCVKcmZj7/H2tqlPXvtILw6s9dwdKTM8RTM/AxxCY+loAnr3qqFK7PMpalwc/ceT2OUOFK6G3rYRSI4SBrlkAP5aQ2/SP27ob8yUEw33apsGi4sevxJ1J1wQ== malyarchuk.bogdan@lll.kpi.ua"
+  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC00RZs1kEXlIPGt7FFcDtmsu+cPYmJQOzZNhoGNgH7UKX9awwl1TuxflN13PaJkhS6QLjXsCf7MZdfclcBjH93wzkay3KdLFpZ4ZUvxk1jayvgoNUg5LKAnHIbx0IgH27A528PBEto6DZ3fo88r0Epcz1N+H66NhYv1pvDrga4MBxI9pM8l/LBC/pcvzVQ94N3Dw9SSp10fkUCZLnPfO761QGyM1SO2buRy1QA3RpTl6+pncy4LoUXK8pxutLqqe0d8Q7F4K5xfku5gGKJ4T3MOGCKrXC8lt1N+Wkrzv/GPDfSYrtu+hzRt1pn2Wc4XvC4H2FcfMx0obqGjiQSF7l0LzvQcIdVH8hj/lL2pQy4Pnn1ke8JZ1jiv3pCM6hZUgFqOCzPlWffIaqY8JthvU+Y9/Ny7TU7Rxv+Du/jLkTjF3CZ3KaZ5mxP0fEpqVEZTuft93cty7I/AwmZ1gOHjV8Hq+IjfZFYtVk8fGWzwYTMnUwVauJuTPHZA2RYWHseQRKV0rz/6qRt+/n/F2Gp70kmbaV9BwQZUPB9ZD7+kGdtS4IqzsEFNzbgJ1yCJujfffJRgHN4fnaVETPkEzyMn885o8SmCnNrrANFipi6d6+t3fncmgNP+q//hxr9Jo2URb77aPMgvSaAuonG1BzHTRW/5R1/QrJu7QiSJ+d7DUcn/w== malyarchuk.bogdan@lll.kpi.ua"
 }
 
 variable "discord_team_id" {
