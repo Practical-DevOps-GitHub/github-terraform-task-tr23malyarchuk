@@ -48,13 +48,9 @@ class ScriptTest < Test::Unit::TestCase
   end
 
   def test_develop_default
-    begin
-      actual = @obj.default_branch
-      expected = 'develop'
-      assert_equal(expected, actual, 'Default branch isn\'t  develop')
-    rescue
-      exit 0
-    end
+    actual = @obj.default_branch
+    expected = 'develop'
+    assert_equal(expected, actual, 'Default branch isn\'t  develop')
   end
 
   def test_codeowners_contains_user
