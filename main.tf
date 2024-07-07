@@ -17,32 +17,24 @@ provider "github" {
 }
 
 resource "github_repository" "repo" {
-  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
   name        = "github-terraform-task-tr23malyarchuk"
   description = "Repository configured by Terraform"
-  visibility  = "public"
-}
-
-data "github_repository" "existing_repo" {
-  full_name = "tr23malyarchuk/github-terraform-task-tr23malyarchuk"
+  visibility  = "public"  # Changed visibility to public
 }
 
 resource "github_branch" "develop" {
-  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
-  repository  = github_repository.repo[0].name
-  branch      = "develop"
+  repository = github_repository.repo.name
+  branch     = "develop"
 }
 
 resource "github_repository_collaborator" "softservedata" {
-  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
-  repository  = github_repository.repo[0].name
-  username    = "softservedata"
-  permission  = "push"
+  repository = github_repository.repo.name
+  username   = "softservedata"
+  permission = "push"
 }
 
 resource "github_branch_protection" "main" {
-  count         = length(data.github_repository.existing_repo) == 0 ? 1 : 0
-  repository_id = github_repository.repo[0].id
+  repository_id = github_repository.repo.id
   pattern       = "main"
 
   required_pull_request_reviews {
@@ -60,8 +52,7 @@ resource "github_branch_protection" "main" {
 }
 
 resource "github_branch_protection" "develop" {
-  count         = length(data.github_repository.existing_repo) == 0 ? 1 : 0
-  repository_id = github_repository.repo[0].id
+  repository_id = github_repository.repo.id
   pattern       = "develop"
 
   required_pull_request_reviews {
@@ -71,10 +62,9 @@ resource "github_branch_protection" "develop" {
 }
 
 resource "github_repository_file" "pull_request_template" {
-  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
-  repository  = github_repository.repo[0].name
-  file        = ".github/pull_request_template.md"
-  content     = <<-EOF
+  repository = github_repository.repo.name
+  file       = ".github/pull_request_template.md"
+  content    = <<-EOF
 # Pull Request Template
 
 ## Describe your changes
@@ -91,24 +81,22 @@ EOF
 }
 
 resource "github_repository_deploy_key" "deploy_key" {
-  count       = length(data.github_repository.existing_repo) == 0 ? 1 : 0
-  repository  = github_repository.repo[0].name
-  title       = "DEPLOY_KEY"
-  key         = var.deploy_key_public_key
-  read_only   = false
+  repository = github_repository.repo.name
+  title      = "DEPLOY_KEY"
+  key        = var.deploy_key_public_key
+  read_only  = false
 }
 
 resource "github_actions_secret" "pat" {
-  count           = length(data.github_repository.existing_repo) == 0 ? 1 : 0
-  repository      = github_repository.repo[0].name
-  secret_name     = "PAT"
-  plaintext_value = var.github_pat_token
+  repository       = github_repository.repo.name
+  secret_name      = "PAT"
+  plaintext_value  = var.github_pat_token
 }
 
 variable "deploy_key_public_key" {
   description = "Deploy Key Public Key"
   type        = string
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCsS2XMSYK4L2Ml6U6lgg0ji2uRg5U1wKwid0XuaS8+M2yREPkBW4pIfwuh1kQfYrCEy6jbq3Tu3WPcK/lilBddZpUw/WB477Dywb1yeEW3MC4QRK44xy3e9wFXAsfuHuH0W49TUZ3GG5IdJJXSgKlg6CM8g46wUXWUja02sqjrbZSRenKL4K010TiPAFo/JuJ9rZqu9SzhqtXp0qycxOJ/tTwzVQY9qWJqYRRDjIOngfbVTd+sFulxisgJwmZE/h+aJLXUZrJq/7xmRGdEwD7xw7y/Ow6SeY3XRN97K66CyRno3VICBl85oBYZXwG99FAS/+5Iu1TJ3/+LCOkksRf4i2Ku9GYuTphnKQNnuMg9wDPPbCrWqlIIFVHO3iITrq+1WwOjzU+7FZ1S+jbPuUNTMbhvJWqsXmCAf6pYxLmJC4F5z54kVWwrNYQuG/iLJaSVQo1qz2gswlH0+DiasDQAvoXQ7FXB8f9nzMUx+LIvM97VOasp3Ffon0KznQj5r4wOzo66L6eH3pB2wFH9bmloE0kmliLBxku8vLXIJU6tQI68A6lEca8quK8lcwpUwz32ZrNWJ1kpVIWdPzYicAuUA+XFx9z5sYuWOQVB6UUPVArljaBh2RhA/ZKwbB1rApmxFZJGSpC4b2DHLL4qYTkIzBCCzWI9TmFnpwaW1QxiIQ== malyarchuk.bogdan@lll.kpi.ua"
+  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDO5Tst9MOrhXKI7VPhGJszR7rxvXkTVb3ANDlWMMBL6VzZNJlpPyjWEaUarl8+xQ0CDXkZyD0OZ8BZRRsyV/e2/yn465N5UdiBJ14aJFhOrMAIP/YPg6ZmL1xOxrh8MPdW9VgjB9ez6/1QlMAZbQJJvQQgnMT8qU6RWEN6EokMdbQmDRpXodDicmHUMNMF3GDoiG8U6ArmWcn1g2uubEh7/6ZAmFhNuAhZCn+Afzi6fDQYbH18fVPVL1spHcOuoyJ0vh7QVf3zYom/+C1SEt36+Y3qsttjP5upTQWujKNEohFnuhkdV4wxAsZv2P20YXvQfFxoDDteAXnG1EICoSi4HE3CNQmKcVhFsBk7dvydu8v8nL8ZFcfvg/8UtBs/09C4MH6rVC5EmV7BlhIwOT85lgZC4snt7w2BVkFbIH7APmxbnsilnU1+VxHO+ndcT2gxh2GvfJRYkL1rAooydjHnkpvL46EXNachQDrlMKckHftOnsnv5GPrOWUUGMdsu09gfKXiAORBpUXCYDaabQXc/RSxau0wUvr4MDTQ/kGj9rOVY84sq+dCVKcmZj7/H2tqlPXvtILw6s9dwdKTM8RTM/AxxCY+loAnr3qqFK7PMpalwc/ceT2OUOFK6G3rYRSI4SBrlkAP5aQ2/SP27ob8yUEw33apsGi4sevxJ1J1wQ== malyarchuk.bogdan@lll.kpi.ua"
 }
 
 variable "discord_team_id" {
