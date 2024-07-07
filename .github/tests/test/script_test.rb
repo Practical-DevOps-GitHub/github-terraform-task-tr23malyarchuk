@@ -66,12 +66,12 @@ class ScriptTest < Test::Unit::TestCase
 
   def test_deny_merge_main
     actual = @obj.rules_required_pull_request_reviews('main')
-    refute_nil(actual, 'We should not allow merge to main branch without PR reviews')
+    assert(actual != nil, 'We should not allow merge to main branch without PR reviews')
   end  
   
   def test_deny_merge_develop
     actual = @obj.rules_required_pull_request_reviews('develop')
-    refute_nil(actual, 'We should not allow merge to develop branch without PR reviews')
+    assert(actual != nil, 'We should not allow merge to develop branch without PR reviews')
   end  
   
   def test_2_approvals_develop
