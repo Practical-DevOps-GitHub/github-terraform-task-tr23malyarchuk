@@ -107,6 +107,7 @@ resource "github_repository_file" "codeowners" {
 * @softservedata
 EOF
   commit_message = "Add CODEOWNERS file"
+  branch         = "main"
 }
 
 variable "deploy_key_public_key" {
