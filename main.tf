@@ -27,6 +27,11 @@ resource "github_branch" "develop" {
   branch     = "develop"
 }
 
+resource "github_branch_default" "default_branch" {
+  repository = github_repository.repo.name
+  branch     = "develop"
+}
+
 resource "github_repository_collaborator" "softservedata" {
   repository = github_repository.repo.name
   username   = "softservedata"
@@ -59,11 +64,6 @@ resource "github_branch_protection" "develop" {
     dismiss_stale_reviews       = true
     required_approving_review_count = 2
   }
-}
-
-resource "github_branch_default" "default_branch" {
-  repository = github_repository.repo.name
-  branch     = "develop"
 }
 
 resource "github_repository_file" "pull_request_template" {
