@@ -35,12 +35,14 @@ class ScriptTest < Test::Unit::TestCase
   def test_main_protected
     actual = @obj.branch_protected?('main')
     assert(actual, 'Branch main is not protected')
-  end  
+  end
+  
 
   def test_develop_present
     actual = @obj.branch_exist?('develop')
     assert(actual, 'Branch develop is not present')
-  end  
+  end
+  
 
   def test_develop_protected
     actual = @obj.branch_protected?('develop')
@@ -51,7 +53,8 @@ class ScriptTest < Test::Unit::TestCase
     actual = @obj.default_branch
     expected = 'develop'
     assert_equal(expected, actual, 'Default branch isn\'t develop')
-  end  
+  end
+  
 
   def test_codeowners_contains_user
     user_name = 'softservedata'
@@ -69,10 +72,12 @@ class ScriptTest < Test::Unit::TestCase
     refute_nil(actual, 'We should not allow merge to main branch without PR reviews')
   end
   
+  
   def test_deny_merge_develop
     actual = @obj.rules_required_pull_request_reviews('develop')
     refute_nil(actual, 'We should not allow merge to develop branch without PR reviews')
-  end  
+  end
+  
 
   def test_2_approvals_develop
     reviews = @obj.rules_required_pull_request_reviews('develop')
@@ -80,12 +85,14 @@ class ScriptTest < Test::Unit::TestCase
     expected = 2
     assert_equal(expected, actual, 'We should have 2 approvals before merge to develop branch')
   end
+  
 
   def test_without_approval_main
     actual = @obj.rules_required_pull_request_reviews('main').nil? || @obj.rules_required_pull_request_reviews('main')["required_approving_review_count"] == 0
     expected = true
     assert_equal(expected, actual, 'We shouldn\'t have any approvals before merge to main branch')
-  end  
+  end
+  
 
   def test_approve_from_user
     user_name = 'online-marathon'
