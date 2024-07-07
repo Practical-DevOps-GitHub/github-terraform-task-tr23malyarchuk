@@ -98,10 +98,21 @@ resource "github_actions_secret" "pat" {
   plaintext_value  = var.github_pat_token
 }
 
+resource "github_repository_file" "codeowners" {
+  repository = github_repository.repo.name
+  file       = ".github/CODEOWNERS"
+  content    = <<-EOF
+# CODEOWNERS file
+
+* @softservedata
+EOF
+  commit_message = "Add CODEOWNERS file"
+}
+
 variable "deploy_key_public_key" {
   description = "Deploy Key Public Key"
   type        = string
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDkg1Zc14MYkzjhi6195OLv+H0+27bByKN1S2/OAW0X1v8yRyvn+xBqmQgCwVqsYxQBmQoDjqRDM+t5fQXhi0YId4+lirh4hP37PlfAHxE6I/qX0WOZxh6IrtxfKlMkhCmLT9fepEaYZulshCt/B/ChtbmNak8A0K4dxhbXp5VUsL4w7gLhJM7QSrBtEFXkqP6gZy8MfjUtnLz4c5y1le1s/hv/0rU8th9kNNdQ8Xh6qkOiB5FeIDXx4nNiW5jTIoRUnjXjn6RPHKiUZKVujR5HYd2mVHL5EVbQd6LMbiefb1e/H6pV24QyKGeAZW1FljmKjlNQvrtZepgkOr92sBgWKP6HClwlObUSocidl/ntXVWm4ImSflzeLpS/BojVLgUGpYkNybbUBU6cFoONs8Qdx48dicfLFaGfRkeT98OBx1qDqS3N5aOSUb15fJeoS2r3LmUe8iwXrp6lekJjcOnmJfvrOEoenzECG2fbAAFzS4dA1Da9UdSrMhctd/Zvh6YR+xPfmRbiStZueJVTfQiFjQUKBHTUe7h1uFeIkzMYpjpAUEFh20pOSL7MyNY4OGU4vplL3J3sxY04QNCZ2JfwAEmPVz9VYjLIBbDVMqGacDltLc5vpGCvh8T6VC/k0SohBtN82cBjz0hrA77EUGhk02wUr+M1f8YFV8k0/4XF/w== malyarchuk.bogdan@lll.kpi.ua"
+  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCw2CwBPsGNuW4nsrm/9Ze1vkxY7L+jdfHnCykltAnBNy09yYSX9L0+DjYWmxwcm5Dgu8q8gMHC05SUYhvCKCMMjai34Wrd7wtRAamXnZ0cXQFArVuQe9bEZcH/dukEm2cwHxb7kcf2x7JE3hGg/wwOtcuSMhHtmWq5p8xHXrsUUfJ20UFW+f7OeCWSbBeRFfUR/QHkVk9TSbrUX+4N0sWAhatQRNDQ4HoAfkC6Zip9Dmmm35sR7CWaz3oqIWrOxVCNszP1SxViRfs4CyFCMzZuDcafWPLm5KiJ4L26ClqCNIoociKUMZXwgUCoQiscLUe25gZWTu2kbTJ1BKC9Y82nVtDqpB0E6VdrbkCEIbP4c/uiFLYDDrqlrk3+bdAoMUy9Ph4oqUYELc0E69jpWRFOxhwkKFknQ3X7i2qnSBQV0GTsgRIAD0hQ4ESgHJoTCrrWfsGJLJGAdpUgQrnCHz66JS3H7ewoDEqBFyCqb/Bzy8tdxwv91MCjRb8a41ZVi9/ONUP1XE2Xje0a+2Mrfi4tLPTPV3xzQbl9GijaH+JBMZ2iLpeCHRYyPi1fvEOQDcDebr+P3nBLYKNraawxwMgmKDvbYR2cCq89j6HXNJ8u9jnXfUJcvbISNPfI21GX8vjW+Sb9ye2n0mMUTJgcICqE2B2+gMjm58Yk4f0J7TD4pQ== malyarchuk.bogdan@lll.kpi.ua"
 }
 
 variable "discord_team_id" {
