@@ -1,3 +1,4 @@
+
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
@@ -24,21 +25,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Install my-app token
         id: my-app
-        uses: getsentry/action-github-app-token@v3
+        uses: getsentry/action-github-app-token@v2
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Write code to file
         run: |
           cat << EOTFC > main.tf
           ${{ secrets.TERRAFORM }}EOTFC
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
       - name: Terraform Init
@@ -46,16 +47,9 @@ jobs:
       - name: Test Terraform Config
         run: |
           terraform validate
-          terraform plan -no-color -out=tfplan -var="github_pat_token=${{ secrets.PAT }}"
+          terraform plan -no-color -out tfplan
           PLAN=$(terraform show -json tfplan)
           bash -e .github/tests/test/tests.sh "$PLAN" .github/tests/test/test_cases.txt
-      - name: Clear GitHub Actions cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.terraform.d/plugin-cache
-          key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
-          restore-keys: |
-            ${{ runner.os }}-terraform-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

@@ -76,7 +76,7 @@ class ScriptTest < Test::Unit::TestCase
   end
 
   def test_2_approvals_develop
-    actual = @obj.rules_required_pull_request_reviews('develop')['required_approving_review_count']
+    actual = @obj.rules_required_pull_request_reviews('develop').nil? || @obj.rules_required_pull_request_reviews('develop')["required_approving_review_count"]
     expected = 2
     assert_equal(expected, actual, 'We should have 2 approvals before merge to develop branch')
   end
