@@ -64,7 +64,7 @@ jobs:
           bundler-cache: true
       - name: Run tests
         env:
-          URL: ${{ github.repository }}
+          URL: "https://github.com/tr23malyarchuk/github-terraform-task-tr23malyarchuk"
           TOKEN: ${{ steps.my-app.outputs.token }}
         working-directory: '.github/tests'
         run: 
