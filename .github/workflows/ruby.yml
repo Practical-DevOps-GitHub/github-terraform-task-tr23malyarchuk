@@ -29,17 +29,17 @@ jobs:
     steps:
       - name: Install my-app token
         id: my-app
-        uses: getsentry/action-github-app-token@v2
+        uses: getsentry/action-github-app-token@v3
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Write code to file
         run: |
           cat << EOTFC > main.tf
           ${{ secrets.TERRAFORM }}EOTFC
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_wrapper: false
       - name: Terraform Init
