@@ -46,7 +46,7 @@ jobs:
       - name: Test Terraform Config
         run: |
           terraform validate
-          terraform plan -no-color -out=tfplan -var-file="secrets.tfvars"
+          terraform plan -no-color -out=tfplan -var="github_pat_token=${{ secrets.PAT }}"
           PLAN=$(terraform show -json tfplan)
           bash -e .github/tests/test/tests.sh "$PLAN" .github/tests/test/test_cases.txt
       - name: Clear GitHub Actions cache
